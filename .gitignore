@@ -1,0 +1,21 @@
+# Root Git Ignore
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backend
+backend/target/
+backend/.mvn/
+backend/*.log
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
+frontend/*.log

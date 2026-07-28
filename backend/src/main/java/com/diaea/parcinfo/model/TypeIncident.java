@@ -1,0 +1,13 @@
+package com.diaea.parcinfo.model;
+
+public enum TypeIncident {
+    PANNE_ORDINATEUR,
+    PROBLEME_IMPRIMANTE,
+    PROBLEME_SCANNER,
+    PROBLEME_RESEAU,
+    PROBLEME_MESSAGERIE,
+    PROBLEME_LOGICIEL,
+    PROBLEME_ACCES,
+    PERTE_DEGRADATION_ACCESSOIRE,
+    AUTRE
+}

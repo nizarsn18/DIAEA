@@ -1,0 +1,14 @@
+package com.diaea.parcinfo.model;
+
+public enum StatutDemande {
+    BROUILLON,
+    SOUMISE,
+    EN_ATTENTE_VALIDATION_CS,
+    EN_ATTENTE_VALIDATION_CD,
+    TRANSMISE_CELLULE_INFO,
+    EN_COURS_TRAITEMENT,
+    SATISFAITE,
+    REJETEE,
+    TRANSMISE_DSI,
+    PROGRAMMEE_ACQUISITION
+}

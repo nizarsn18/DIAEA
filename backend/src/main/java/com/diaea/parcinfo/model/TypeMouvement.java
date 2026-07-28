@@ -1,0 +1,14 @@
+package com.diaea.parcinfo.model;
+
+public enum TypeMouvement {
+    MUTATION_UTILISATEUR,
+    CHANGEMENT_SERVICE,
+    DEPART_AGENT,
+    REMPLACEMENT_MATERIEL,
+    RESTITUTION,
+    REAFFECTATION,
+    TRANSFERT_BUREAU,
+    MISE_EN_STOCK,
+    MISE_EN_REPARATION,
+    REFORME
+}
