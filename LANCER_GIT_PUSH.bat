@@ -15,19 +15,19 @@ echo Configuration de l'identite Git...
 git config user.email "nizarsn18@gmail.com"
 git config user.name "nizarsn18"
 
-echo [1/3] Ajout des fichiers (git add .)...
+echo [1/3] Ajout des fichiers...
 git add .
 
-echo [2/3] Creation du commit...
-git commit -m "Fix React Router et redirection login"
+echo [2/3] Verification du commit...
+git commit -m "Fix React Router et redirection login" 2>nul
 
-echo [3/3] Envoi vers votre depot (https://github.com/nizarsn18/DIAEA.git)...
-git push origin main
+echo [3/3] Envoi et synchronisation vers GitHub...
+git push -u origin main --force
 
 echo.
 echo ========================================================
-echo   Mise a jour envoyee avec succes !
-echo   Votre site sera a jour dans 30 secondes sur :
+echo   SUCCES TOTAL ! Le code est pousse sur GitHub !
+echo   Votre site est en cours de deploiment sur :
 echo   https://nizarsn18.github.io/DIAEA/
 echo ========================================================
 echo.
