@@ -1,13 +1,19 @@
 import React, { useState, useContext } from 'react';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { HardDrive, Lock, User, AlertCircle } from 'lucide-react';
 
 export const LoginPage = () => {
-  const { login } = useContext(AuthContext);
+  const { user, login } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  if (user) {
+    return <Navigate to="/" replace />;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,6 +21,7 @@ export const LoginPage = () => {
     setLoading(true);
     try {
       await login(username, password);
+      navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Nom d’utilisateur ou mot de passe incorrect.');
     } finally {
