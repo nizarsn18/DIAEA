@@ -1,8 +1,10 @@
 package com.diaea.parcinfo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +21,9 @@ public class Utilisateur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true, length = 50)
+    private String matricule;
 
     @Column(unique = true, nullable = false, length = 50)
     private String username;
@@ -44,8 +49,22 @@ public class Utilisateur {
     @Column(length = 100)
     private String division;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "service_id")
+    @JsonIgnoreProperties("division")
+    private Service serviceRef;
+
     @Column(length = 50)
     private String telephone;
+
+    @Column(name = "date_nomination_service")
+    private LocalDate dateNominationService;
+
+    @Column(name = "date_nomination_division")
+    private LocalDate dateNominationDivision;
+
+    @Column(name = "niveau_acces", length = 50)
+    private String niveauAcces;
 
     @Builder.Default
     private Boolean actif = true;

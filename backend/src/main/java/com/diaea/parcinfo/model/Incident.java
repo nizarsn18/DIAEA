@@ -1,9 +1,12 @@
 package com.diaea.parcinfo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "incidents")
@@ -47,6 +50,11 @@ public class Incident {
 
     @Column(name = "action_realisee", columnDefinition = "TEXT")
     private String actionRealisee;
+
+    @OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("incident")
+    @Builder.Default
+    private List<Intervention> interventions = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)

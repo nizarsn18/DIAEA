@@ -12,6 +12,7 @@ import { DemandePage } from './pages/DemandePage';
 import { SuiviDSIPage } from './pages/SuiviDSIPage';
 import { AcquisitionPage } from './pages/AcquisitionPage';
 import { IncidentPage } from './pages/IncidentPage';
+import ReferentielPage from './pages/ReferentielPage';
 import { AdminPage } from './pages/AdminPage';
 
 const ProtectedLayout = ({ children, title }) => {
@@ -74,6 +75,12 @@ export const App = () => {
           <Route path="/incidents" element={
             <ProtectedLayout title="Incidents & Support IT">
               <IncidentPage />
+            </ProtectedLayout>
+          } />
+
+          <Route path="/referentiels" element={
+            <ProtectedLayout title="Référentiels du Système">
+              <ReferentielPage />
             </ProtectedLayout>
           } />
 

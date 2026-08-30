@@ -1,8 +1,6 @@
 @echo off
-chcp 65001 > nul
 title Lancement DIAEA Parc Info
 
-:: Ajouter System32 et PowerShell au PATH du script
 set "PATH=%SystemRoot%\System32;%SystemRoot%\System32\WindowsPowerShell\v1.0;%PATH%"
 
 echo ========================================================
@@ -22,12 +20,11 @@ start "DIAEA Frontend" cmd /k "cd /d %FRONTEND_DIR% && npm run dev"
 
 echo.
 echo ========================================================
-echo   Les 2 fenetres de terminal sont lancées.
+echo   Les 2 fenetres de terminal sont lancees.
 echo   Gardez-les ouvertes !
 echo.
-echo   Attente de 12 secondes puis ouverture du navigateur...
+echo   Attente de 5 secondes puis ouverture du navigateur...
 echo ========================================================
-timeout /t 12 > nul
+timeout /t 5 > nul
 
 start http://localhost:5173
-pause

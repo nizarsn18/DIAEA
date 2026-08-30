@@ -2,13 +2,15 @@ import React, { useEffect, useState, useContext } from 'react';
 import API from '../api/axios';
 import { Badge } from '../components/Badge';
 import { AuthContext } from '../context/AuthContext';
-import { Plus, ShoppingCart } from 'lucide-react';
+import { Plus, PackageCheck, Archive, Check } from 'lucide-react';
+import { enregistrerReceptionAcquisition, alimenterStockAcquisition } from '../api';
 
 export const AcquisitionPage = () => {
   const { hasRole } = useContext(AuthContext);
   const [acquisitions, setAcquisitions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     typeAcquisition: 'BDC',
@@ -54,12 +56,45 @@ export const AcquisitionPage = () => {
     }
   };
 
+  const handleEnregistrerReception = async (acq) => {
+    const qteStr = window.prompt(`Quantité livrée pour l'acquisition ${acq.reference} :`, acq.quantiteCommandee);
+    if (!qteStr) return;
+    const qte = parseInt(qteStr);
+    if (isNaN(qte) || qte <= 0) return;
+
+    setActionLoading(true);
+    try {
+      await enregistrerReceptionAcquisition(acq.id, { quantiteLivree: qte });
+      alert("Réception enregistrée avec succès.");
+      loadData();
+    } catch (err) {
+      alert("Erreur enregistrement réception.");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleAlimenterStock = async (acq) => {
+    if (!window.confirm(`Confirmez-vous le déversement automatique des équipements de l'acquisition ${acq.reference} dans le stock du parc ?`)) return;
+
+    setActionLoading(true);
+    try {
+      const res = await alimenterStockAcquisition(acq.id);
+      alert(res.data?.message || "Stock alimenté avec succès.");
+      loadData();
+    } catch (err) {
+      alert("Erreur lors de l'alimentation du stock.");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'white' }}>Suivi des Acquisitions (BDC & Marchés)</h1>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Gestion des commandes directes et marchés lancés par la direction DIAEA</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Gestion des commandes directes, réceptions et alimentation du stock</p>
         </div>
 
         {hasRole('CELLULE_INFORMATIQUE') && (
@@ -82,13 +117,14 @@ export const AcquisitionPage = () => {
                 <th>Qté Commandée</th>
                 <th>Qté Livrée</th>
                 <th>Statut</th>
+                <th style={{ textAlign: 'right' }}>Actions Diagramme</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan="8" style={{ textAlign: 'center', padding: '2rem' }}>Chargement...</td></tr>
+                <tr><td colSpan="9" style={{ textAlign: 'center', padding: '2rem' }}>Chargement...</td></tr>
               ) : acquisitions.length === 0 ? (
-                <tr><td colSpan="8" style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>Aucune acquisition enregistrée</td></tr>
+                <tr><td colSpan="9" style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>Aucune acquisition enregistrée</td></tr>
               ) : (
                 acquisitions.map((item) => (
                   <tr key={item.id}>
@@ -111,6 +147,30 @@ export const AcquisitionPage = () => {
                     <td>{item.quantiteCommandee}</td>
                     <td>{item.quantiteLivree || 0}</td>
                     <td><Badge status={item.statut} /></td>
+                    <td style={{ textAlign: 'right' }}>
+                      {hasRole('CELLULE_INFORMATIQUE') && (
+                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                          <button
+                            disabled={actionLoading}
+                            onClick={() => handleEnregistrerReception(item)}
+                            className="btn btn-secondary"
+                            style={{ fontSize: '0.75rem', padding: '0.3rem 0.6rem', gap: '0.3rem' }}
+                            title="enregistrerReception()"
+                          >
+                            <PackageCheck size={14} /> Réception
+                          </button>
+                          <button
+                            disabled={actionLoading || item.statut === 'LIVREE' || item.statut === 'LIVRE'}
+                            onClick={() => handleAlimenterStock(item)}
+                            className="btn btn-primary"
+                            style={{ fontSize: '0.75rem', padding: '0.3rem 0.6rem', gap: '0.3rem' }}
+                            title="alimenterStock()"
+                          >
+                            <Archive size={14} /> Alimenter Stock
+                          </button>
+                        </div>
+                      )}
+                    </td>
                   </tr>
                 ))
               )}

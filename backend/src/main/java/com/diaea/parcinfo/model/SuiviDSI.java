@@ -37,6 +37,9 @@ public class SuiviDSI {
     @Column(name = "quantite_accordee")
     private Integer quantiteAccordee;
 
+    @Column(name = "delai_livraison")
+    private Integer delaiLivraison; // Delai en jours
+
     @Enumerated(EnumType.STRING)
     @Column(name = "statut_dsi", nullable = false, length = 30)
     @Builder.Default

@@ -1,5 +1,6 @@
 package com.diaea.parcinfo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,8 +26,16 @@ public class Materiel {
     @Column(name = "type_materiel", nullable = false, length = 50)
     private String typeMateriel; // PC bureau, Imprimante, Scanner, etc.
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "type_materiel_id")
+    private TypeMateriel typeMaterielRef;
+
     @Column(nullable = false, length = 100)
     private String marque;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "marque_id")
+    private Marque marqueRef;
 
     @Column(nullable = false, length = 100)
     private String modele;
@@ -44,11 +53,19 @@ public class Materiel {
     @Column(name = "reference_acquisition", length = 100)
     private String referenceAcquisition;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "acquisition_id")
+    @JsonIgnoreProperties("documents")
+    private Acquisition acquisition;
+
     @Column(name = "date_acquisition")
     private LocalDate dateAcquisition;
 
+    @Column(name = "date_fin_garantie")
+    private LocalDate dateFinGarantie;
+
     @Column(length = 100)
-    private String garantie; // Durée ou date fin
+    private String garantie; // Durée ou description
 
     @Enumerated(EnumType.STRING)
     @Column(name = "etat_materiel", nullable = false, length = 30)

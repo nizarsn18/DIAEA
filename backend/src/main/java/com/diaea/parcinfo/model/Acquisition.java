@@ -1,11 +1,14 @@
 package com.diaea.parcinfo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "acquisitions")
@@ -32,6 +35,10 @@ public class Acquisition {
 
     @Column(nullable = false, length = 150)
     private String fournisseur;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fournisseur_id")
+    private Fournisseur fournisseurRef;
 
     @Column(name = "date_lancement")
     private LocalDate dateLancement;
@@ -65,6 +72,11 @@ public class Acquisition {
 
     @Column(name = "documents_joints", length = 255)
     private String documentsJoints;
+
+    @OneToMany(mappedBy = "acquisition", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("acquisition")
+    @Builder.Default
+    private List<DocumentJoint> documents = new ArrayList<>();
 
     private LocalDateTime createdAt;
 

@@ -1,9 +1,12 @@
 package com.diaea.parcinfo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "demandes_materiel")
@@ -67,6 +70,11 @@ public class DemandeMateriel {
 
     @Column(name = "date_decision_cellule_info")
     private LocalDateTime dateDecisionCelluleInfo;
+
+    @OneToMany(mappedBy = "demandeMateriel", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("demandeMateriel")
+    @Builder.Default
+    private List<Validation> validations = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 40)

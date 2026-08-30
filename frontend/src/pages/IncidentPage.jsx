@@ -2,13 +2,15 @@ import React, { useEffect, useState, useContext } from 'react';
 import API from '../api/axios';
 import { Badge } from '../components/Badge';
 import { AuthContext } from '../context/AuthContext';
-import { AlertTriangle, Plus, CheckCircle, Wrench } from 'lucide-react';
+import { AlertTriangle, Plus, CheckCircle, Wrench, History } from 'lucide-react';
+import InterventionModal from '../components/InterventionModal';
 
 export const IncidentPage = () => {
   const { hasRole, user } = useContext(AuthContext);
   const [incidents, setIncidents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [selectedIncidentIntervention, setSelectedIncidentIntervention] = useState(null);
 
   const [formData, setFormData] = useState({
     typeIncident: 'PANNE_ORDINATEUR',
@@ -95,29 +97,47 @@ export const IncidentPage = () => {
 
                 {item.actionRealisee && (
                   <div style={{ background: 'rgba(6, 214, 160, 0.08)', border: '1px solid rgba(6, 214, 160, 0.2)', padding: '0.5rem 0.75rem', borderRadius: 'var(--radius-sm)', fontSize: '0.8rem', color: '#06d6a0', marginTop: '0.5rem' }}>
-                    <strong>Intervention:</strong> {item.actionRealisee}
+                    <strong>Dernière Action:</strong> {item.actionRealisee}
                   </div>
                 )}
               </div>
 
-              {hasRole('CELLULE_INFORMATIQUE') && item.statut !== 'CLOTURE' && (
-                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color)' }}>
-                  {item.statut === 'NOUVEAU' && (
-                    <button className="btn btn-secondary" style={{ flex: 1, fontSize: '0.8rem' }} onClick={() => handleTraiter(item.id, 'EN_COURS')}>
-                      <Wrench size={14} /> Prendre en Charge
-                    </button>
-                  )}
-                  {item.statut === 'EN_COURS' && (
-                    <button className="btn btn-success" style={{ flex: 1, fontSize: '0.8rem' }} onClick={() => handleTraiter(item.id, 'CLOTURE')}>
-                      <CheckCircle size={14} /> Clôturer Ticket
-                    </button>
-                  )}
-                </div>
-              )}
+              <div style={{ marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <button
+                  onClick={() => setSelectedIncidentIntervention(item)}
+                  className="btn btn-secondary"
+                  style={{ fontSize: '0.8rem', width: '100%', justifyContent: 'center', gap: '0.4rem' }}
+                >
+                  <History size={14} /> Voir Interventions
+                </button>
+
+                {hasRole('CELLULE_INFORMATIQUE') && item.statut !== 'CLOTURE' && (
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    {item.statut === 'NOUVEAU' && (
+                      <button className="btn btn-secondary" style={{ flex: 1, fontSize: '0.8rem' }} onClick={() => handleTraiter(item.id, 'EN_COURS')}>
+                        <Wrench size={14} /> Prendre en Charge
+                      </button>
+                    )}
+                    {item.statut === 'EN_COURS' && (
+                      <button className="btn btn-success" style={{ flex: 1, fontSize: '0.8rem' }} onClick={() => handleTraiter(item.id, 'CLOTURE')}>
+                        <CheckCircle size={14} /> Clôturer Ticket
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           ))
         )}
       </div>
+
+      {/* Modal Interventions */}
+      {selectedIncidentIntervention && (
+        <InterventionModal
+          incident={selectedIncidentIntervention}
+          onClose={() => { setSelectedIncidentIntervention(null); loadIncidents(); }}
+        />
+      )}
 
       {/* Modal Création Ticket Incident */}
       {showModal && (

@@ -9,7 +9,8 @@ import {
   ShoppingCart, 
   AlertTriangle, 
   ShieldCheck,
-  HardDrive
+  HardDrive,
+  Layers
 } from 'lucide-react';
 
 export const Sidebar = () => {
@@ -23,6 +24,10 @@ export const Sidebar = () => {
     { label: 'Acquisitions (BDC/Marchés)', path: '/acquisitions', icon: ShoppingCart },
     { label: 'Incidents & Support', path: '/incidents', icon: AlertTriangle },
   ];
+
+  if (hasRole('CELLULE_INFORMATIQUE') || hasRole('ADMINISTRATEUR')) {
+    navs.push({ label: 'Référentiels', path: '/referentiels', icon: Layers });
+  }
 
   if (hasRole('ADMINISTRATEUR')) {
     navs.push({ label: 'Administration', path: '/admin', icon: ShieldCheck });

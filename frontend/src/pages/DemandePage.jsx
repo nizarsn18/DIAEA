@@ -185,12 +185,14 @@ export const DemandePage = () => {
                   value={formData.typeMaterielDemande} 
                   onChange={e => setFormData({...formData, typeMaterielDemande: e.target.value})}
                 >
-                  <option value="PC Portable">PC Portable</option>
-                  <option value="Ordinateur de bureau">Ordinateur de bureau</option>
-                  <option value="Imprimante">Imprimante</option>
-                  <option value="Scanner">Scanner</option>
-                  <option value="Vidéoprojecteur">Vidéoprojecteur</option>
-                  <option value="Écran">Écran supplémentaire</option>
+                  <option value="PC Portable">💻 PC Portable</option>
+                  <option value="Ordinateur de bureau">🖥️ Ordinateur de bureau</option>
+                  <option value="Imprimante">🖨️ Imprimante Multifonction</option>
+                  <option value="Scanner">📟 Scanner Documentaire</option>
+                  <option value="Vidéoprojecteur">📹 Vidéoprojecteur</option>
+                  <option value="Écran">🖥️ Écran supplémentaire (Moniteur)</option>
+                  <option value="Équipement Réseau">🌐 Équipement Réseau (Switch / Routeur)</option>
+                  <option value="Onduleur">🔋 Onduleur UPS</option>
                 </select>
               </div>
 
